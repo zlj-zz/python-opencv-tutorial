@@ -1,8 +1,15 @@
 import os
 import json
+import time
 import numpy as np
 import cv2 as cv
 from pprint import pprint
+
+
+def load_labels(path):
+    """Load class labels from json file."""
+    labels = json.load(open(path))
+    return labels
 
 
 def id_class_name(class_id, labels_dict):
@@ -12,6 +19,27 @@ def id_class_name(class_id, labels_dict):
             return value
 
 
+def draw_size_and_fps(img, size, fps):
+    cv.putText(
+        img,
+        f"Size: {size}",
+        (0, 20),
+        cv.FONT_HERSHEY_COMPLEX_SMALL,
+        1,
+        (0, 0, 240),
+        1,
+    )
+    cv.putText(
+        img,
+        f"FPS: {fps}",
+        (0, 40),
+        cv.FONT_HERSHEY_COMPLEX_SMALL,
+        1,
+        (0, 0, 240),
+        1,
+    )
+
+
 if __name__ == "__main__":
     dir_path = os.path.dirname(__file__)
     model_path = os.path.join(dir_path, "frozen_inference_graph.pb")
@@ -19,7 +47,7 @@ if __name__ == "__main__":
     label_path = os.path.join(dir_path, "labels.json")
 
     # Load class labels.
-    labels = json.load(open(label_path))
+    labels = load_labels(label_path)
     pprint(labels)
 
     # Load model.
@@ -30,15 +58,22 @@ if __name__ == "__main__":
         print(layer)
     # exit(0)
 
+    # Init and open camera.
     cap = cv.VideoCapture(0)
+    if not cap.isOpened():
+        cap.open()
+    cap_size = (cap.get(3), cap.get(4))
+
     while cv.waitKey(1) < 0:
+        start_time = time.time()
         success, frame = cap.read()
-        if frame is None:
+        if not success:
             cv.waitKey()
             break
 
         rows, cols = frame.shape[:-1]
 
+        # Resize image and swap BGR to RGB.
         blob = cv.dnn.blobFromImage(
             frame,
             size=(300, 300),
@@ -78,5 +113,8 @@ if __name__ == "__main__":
                     (243, 0, 0),
                     2,
                 )
+
+        # Draw capture size and FPS.
+        draw_size_and_fps(frame, cap_size, round(1.0 / (time.time() - start_time), 2))
 
         cv.imshow("figure", frame)
