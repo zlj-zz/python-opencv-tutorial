@@ -18,6 +18,7 @@
         "imwrite",
         "mgrid",
         "numpy",
+        "pbtxt",
         "pyzbar",
         "qrcode",
         "savez",

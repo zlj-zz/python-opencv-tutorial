@@ -6,7 +6,7 @@ Calibration files are required in [calibration_camera](https://github.com/zlj-zz
 calibration_camera
 ├── 3a4.bmp
 ├── calibration.py
-├── genrate.py
+├── generate.py
 ├── matrix_distortion.npz
 ├── take_picture.py
 └── test_load_calibration_data.py
