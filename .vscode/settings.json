@@ -1,0 +1,27 @@
+{
+    "python.languageServer": "Pylance",
+    "python.formatting.provider": "black",
+    "[python]": {
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
+        ],
+        "editor.tabSize": 4,
+        "editor.wordBasedSuggestions": false
+    },
+    "editor.tabSize": 4,
+    "cSpell.words": [
+        "RETR",
+        "dtype",
+        "hstack",
+        "imread",
+        "imshow",
+        "imwrite",
+        "mgrid",
+        "numpy",
+        "pyzbar",
+        "qrcode",
+        "savez",
+        "undistort",
+        "vstack"
+    ]
+}
