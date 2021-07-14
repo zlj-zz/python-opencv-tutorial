@@ -1,7 +1,8 @@
-import numpy as np
-import cv2 as cv
+#!/usr/bin/env python3
 import os
 import glob
+import numpy as np
+import cv2 as cv
 from pprint import pprint
 
 
@@ -83,7 +84,7 @@ def calibration_camera(row, col, path=None, cap_num=None, saving=False):
 
 
 if __name__ == "__main__":
-    path = os.path.dirname(__file__) + "/.."
+    path = os.path.dirname(__file__)
     mtx, dist = calibration_camera(8, 6, path, saving=True)
     # mtx, dist = calibration_camera(8, 6, cap_num=1, saving=True)
 

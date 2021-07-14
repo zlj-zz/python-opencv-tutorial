@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
+
 """
 This is an auxiliary file to help calibrate the camera.
 It will call the camera, get the picture and display it in real time.
 You can enter any value in the console to save a picture.
 """
 
+import os
 import cv2
 import threading
 
@@ -13,6 +16,7 @@ cap_num = int(input("Input the camare number:"))
 name = int(input("Input start name, use number:"))
 
 cap = cv2.VideoCapture(cap_num)
+dir_path = os.path.dirname(__file__)
 
 
 def save():
@@ -24,11 +28,10 @@ def save():
 
 threading.Thread(target=save, daemon=True).start()
 
-
 while cv2.waitKey(1) != ord("q"):
     _, frame = cap.read()
     if if_save:
-        img_name = str(name) + ".jpg"
+        img_name = dir_path + str(name) + ".jpg"
         cv2.imwrite(img_name, frame)
         print("Save {} successful.".format(img_name))
         name += 1
