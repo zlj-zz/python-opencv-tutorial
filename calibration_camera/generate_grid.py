@@ -29,7 +29,7 @@ for j in range(row):
             frame[j][i][1] = 255
             frame[j][i][2] = 255
 cv2.imshow("", frame)
-while cv2.waitKey(2):
+while cv2.waitKey(2) & 0xFF != ord("q"):
     continue
 cv2.destroyAllWindows()
 

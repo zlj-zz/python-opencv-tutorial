@@ -22,6 +22,9 @@ Like this:
 
 ![grid](./assets/grid.png)
 
+
+You can also use my saved pictures directly. [https://github.com/zlj-zz/python-opencv-tutorial/tree/main/calibration_camera/grid.png](https://github.com/zlj-zz/python-opencv-tutorial/tree/main/calibration_camera/grid.png)
+
 ## 2. Take calibrate image
 
 You need to use your camera to take pictures of the grid and save them.
