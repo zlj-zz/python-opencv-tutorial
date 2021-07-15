@@ -1,3 +1,10 @@
+"""
+Detect object.
+env:
+    python2/python3
+    opencv4.*
+"""
+
 import os
 import json
 import time
@@ -22,7 +29,7 @@ def id_class_name(class_id, labels_dict):
 def draw_size_and_fps(img, size, fps):
     cv.putText(
         img,
-        f"Size: {size}",
+        "Size: {size}".format(size=size),
         (0, 20),
         cv.FONT_HERSHEY_COMPLEX_SMALL,
         1,
@@ -31,7 +38,7 @@ def draw_size_and_fps(img, size, fps):
     )
     cv.putText(
         img,
-        f"FPS: {fps}",
+        "FPS: {fps}".format(fps=fps),
         (0, 40),
         cv.FONT_HERSHEY_COMPLEX_SMALL,
         1,
@@ -41,6 +48,7 @@ def draw_size_and_fps(img, size, fps):
 
 
 if __name__ == "__main__":
+    # Get needed pathes.
     dir_path = os.path.dirname(__file__)
     model_path = os.path.join(dir_path, "frozen_inference_graph.pb")
     pbtxt_path = os.path.join(dir_path, "graph.pbtxt")
@@ -106,7 +114,10 @@ if __name__ == "__main__":
                 )
                 cv.putText(
                     frame,
-                    f"{id_class_name(class_id, labels)}: {round(score * 100, 2)}%",
+                    "{class_name}: {percent}%".format(
+                        class_name=id_class_name(class_id, labels),
+                        percent=round(score * 100, 2),
+                    ),
                     (int(left), int(top) - 10),
                     cv.FONT_HERSHEY_COMPLEX_SMALL,
                     1,
@@ -117,4 +128,5 @@ if __name__ == "__main__":
         # Draw capture size and FPS.
         draw_size_and_fps(frame, cap_size, round(1.0 / (time.time() - start_time), 2))
 
+        # Show.
         cv.imshow("figure", frame)
