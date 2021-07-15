@@ -1,4 +1,5 @@
 {
+    "python.defaultInterpreterPath": "/opt/homebrew/bin/python",
     "python.languageServer": "Pylance",
     "python.formatting.provider": "black",
     "[python]": {

@@ -1,4 +1,4 @@
-#!/usr/env python3
+#!/usr/bin/env python3
 import cv2
 import numpy as np
 from pyzbar.pyzbar import decode
