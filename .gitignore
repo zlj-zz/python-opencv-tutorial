@@ -1,5 +1,6 @@
 
 .DS_Store
 /*.jpg
+/calibration_camera/cal_*.jpg
 
 test.py

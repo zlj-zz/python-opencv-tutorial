@@ -1,4 +1,4 @@
-## How to calibrate the camera
+# How to calibrate the camera
 
 Calibration files are required in [calibration_camera](https://github.com/zlj-zz/python-opencv-tutorial/tree/main/calibration_camera) directory. We can see its directory structure:
 
@@ -14,7 +14,7 @@ calibration_camera
 0 directories, 6 files
 ```
 
-### 1. Generate grid image
+## 1. Generate grid image
 
 We can run the `generate_grid.py` file to generate the grid image for calibration.
 
@@ -22,7 +22,7 @@ Like this:
 
 ![grid](./assets/grid.png)
 
-### 2. Take calibrate image
+## 2. Take calibrate image
 
 You need to use your camera to take pictures of the grid and save them.
 
@@ -32,7 +32,7 @@ Save photos like this:
 
 ![](./assets/1.jpg)
 
-### 3. Start calibration
+## 3. Start calibration
 
 After the preparation, the calibration can be started immediately.
 
@@ -40,8 +40,14 @@ You can run the `calibration.py` to start calibration, then you will look the im
 
 ![](./assets/draw_line_in_grid.png)
 
-### 4. Testing
+## 4. Testing
 
 At the last, you can test the data of calibration.
 
 Run the `test_load_calibration_data.py` to load the `matrix_distortion.npz` and open camera to displaying.
+
+
+---
+
+> Tip:
+> 	Can run on Python2 and Python3 both.

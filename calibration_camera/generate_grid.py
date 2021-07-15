@@ -1,6 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
-"""Generate the grip image for calibration."""
+"""
+Generate the grip image for calibration.
+env:
+    python2
+    python3
+"""
 
 import os
 import cv2
@@ -24,5 +29,8 @@ for j in range(row):
             frame[j][i][1] = 255
             frame[j][i][2] = 255
 cv2.imshow("", frame)
-cv2.waitKey(0) & 0xFF == ord("q")
-# cv2.imwrite('./calibration.jpg',frame)
+while cv2.waitKey(2):
+    continue
+cv2.destroyAllWindows()
+
+# cv2.imwrite('./calibration.png',frame)

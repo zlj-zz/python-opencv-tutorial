@@ -11,10 +11,10 @@ if __name__ == "__main__":
     print(load["matrix"])
     print(load["distortion"])
 
-
     mtx = load["matrix"]
     dist = load["distortion"]
-    cap = cv.VideoCapture(1)
+    num = int(input("Input camera number:"))
+    cap = cv.VideoCapture(num)
     while cv.waitKey(1) != ord("q"):
         _, img = cap.read()
         h, w = img.shape[:2]

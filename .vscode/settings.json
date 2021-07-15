@@ -19,6 +19,7 @@
         "mgrid",
         "numpy",
         "pbtxt",
+        "pformat",
         "pyzbar",
         "qrcode",
         "savez",

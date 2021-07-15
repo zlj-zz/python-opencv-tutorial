@@ -1,9 +1,22 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
+"""
+Calibrate fish eye camera.
+env:
+    python2
+    python3
+"""
+
 import os
 import glob
 import numpy as np
 import cv2 as cv
-from pprint import pprint
+from pprint import pformat
+
+
+def left_indent(text, indent=4):
+    indent_str = " " * indent
+    return "".join((indent_str + l for l in text.splitlines(True)))
 
 
 def calibration_camera(row, col, path=None, cap_num=None, saving=False):
@@ -22,29 +35,32 @@ def calibration_camera(row, col, path=None, cap_num=None, saving=False):
     obj_p = np.zeros((row * col, 3), np.float32)
     obj_p[:, :2] = np.mgrid[0:row, 0:col].T.reshape(-1, 2)
     # Arrays to store object points and image points from all the images.
-    obj_points = []  # 3d point in real world space
-    img_points = []  # 2d points in image plane.
-
-    gray = None
 
     def _find_grid(img):
-        nonlocal gray, obj_points, img_points
-        gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        _find_grid.gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         # Find the chess board corners
-        ret, corners = cv.findChessboardCorners(gray, (row, col), None)
+        ret, corners = cv.findChessboardCorners(_find_grid.gray, (row, col), None)
         # If found, add object points, image points (after refining them)
         if ret == True:
-            obj_points.append(obj_p)
-            corners2 = cv.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
-            img_points.append(corners)
+            _find_grid.obj_points.append(obj_p)
+            corners2 = cv.cornerSubPix(
+                _find_grid.gray, corners, (11, 11), (-1, -1), criteria
+            )
+            _find_grid.img_points.append(corners)
             # Draw and display the corners
             cv.drawChessboardCorners(img, (row, col), corners2, ret)
+
+    _find_grid.obj_points = []  # 3d point in real world space
+    _find_grid.img_points = []  # 2d points in image plane.
+    _find_grid.gray = None
 
     if path and cap_num:
         raise Exception("The parameter `path` and `cap_num` only need one.")
     if path:
-        images = glob.glob(os.path.join(path, "*.jpg"))
-        pprint(images)
+        images = glob.glob(os.path.join(path, "cal_*.jpg"))
+        print("Found calibration images:")
+        print(left_indent(pformat(images)))
+        print("-" * 70)
         for f_name in images:
             img = cv.imread(f_name)
             _find_grid(img)
@@ -57,28 +73,44 @@ def calibration_camera(row, col, path=None, cap_num=None, saving=False):
             _find_grid(img)
             cv.imshow("img", img)
             cv.waitKey(500)
-            print(len(obj_points))
-            if len(obj_points) > 14:
+            print(len(_find_grid.obj_points))
+            if len(_find_grid.obj_points) > 14:
                 break
 
     cv.destroyAllWindows()
 
+    print("Found grid number: {}.".format(len(_find_grid.obj_points)))
+    print("-" * 70)
+
     ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(
-        obj_points, img_points, gray.shape[::-1], None, None
+        _find_grid.obj_points,
+        _find_grid.img_points,
+        _find_grid.gray.shape[::-1],
+        None,
+        None,
     )
-    print("ret: {}".format(ret))
-    print("matrix:")
-    pprint(mtx)
-    print("distortion: {}".format(dist))
+    print("Calibration result:")
+    print("    ret: {}".format(ret))
+    print(left_indent("matrix:\n{}".format(pformat(mtx))))
+    print(left_indent("distortion: {}".format(pformat(dist))))
+    print("-" * 70)
     if saving:
+        print("Saving calibration data, path: <current_path>/matrix_distortion.npz")
+        print("-" * 70)
         np.savez("matrix_distortion", matrix=mtx, distortion=dist)
 
     mean_error = 0
-    for i in range(len(obj_points)):
-        img_points_2, _ = cv.projectPoints(obj_points[i], rvecs[i], tvecs[i], mtx, dist)
-        error = cv.norm(img_points[i], img_points_2, cv.NORM_L2) / len(img_points_2)
+    for i in range(len(_find_grid.obj_points)):
+        img_points_2, _ = cv.projectPoints(
+            _find_grid.obj_points[i], rvecs[i], tvecs[i], mtx, dist
+        )
+        error = cv.norm(_find_grid.img_points[i], img_points_2, cv.NORM_L2) / len(
+            img_points_2
+        )
         mean_error += error
-    print("total error: {}".format(mean_error / len(obj_points)))
+    print("Testing result:")
+    print("    total error: {}".format(mean_error / len(_find_grid.obj_points)))
+    print("-" * 70)
 
     return mtx, dist
 
