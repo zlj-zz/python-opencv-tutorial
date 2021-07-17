@@ -13,6 +13,9 @@ import cv2 as cv
 from pprint import pprint
 
 
+CV_VERSION = int(cv.__version__[0])
+
+
 def load_labels(path):
     """Load class labels from json file."""
     labels = json.load(open(path))
@@ -59,7 +62,13 @@ if __name__ == "__main__":
     pprint(labels)
 
     # Load model.
-    net = cv.dnn.readNetFromTensorflow(model_path, pbtxt_path)
+    if CV_VERSION == 4:
+        net = cv.dnn.readNetFromTensorflow(model_path, pbtxt_path)
+    else:
+        print(
+            "Load tensorflow model need opencv 4, your version is {}.".format(CV_VERSION)
+        )
+        exit(0)
 
     # Print dnn layer.
     for layer in net.getLayerNames():

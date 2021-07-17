@@ -12,6 +12,8 @@
     "editor.tabSize": 4,
     "cSpell.words": [
         "RETR",
+        "aruco",
+        "coeffs",
         "dtype",
         "hstack",
         "imread",
