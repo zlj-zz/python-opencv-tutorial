@@ -45,9 +45,11 @@ if __name__ == "__main__":
             if ids is not None:
                 # print('corners:', corners, 'ids:', ids)
                 print("ids:", ids)
-                rvec, tvec, _ = cv.aruco.estimatePoseSingleMarkers(
+                ret = cv.aruco.estimatePoseSingleMarkers(
                     corners, 0.05, camera_matrix, dist_coeffs
                 )
+                # print(ret)
+                (rvec, tvec) = (ret[0], ret[1])
                 (rvec - tvec).any()
 
                 print("rvec:", rvec, "tvec:", tvec)
